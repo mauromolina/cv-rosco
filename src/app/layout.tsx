@@ -19,7 +19,7 @@ const nunito = Nunito({
 });
 
 export const metadata: Metadata = {
-  title: "CV Rosco - Juego Bíblico Estilo Pasapalabra",
+  title: "Rosco - Iglesia Cristo Viviente",
   description:
     "Juega al rosco de preguntas bíblicas estilo Pasapalabra. 4 roscos temáticos con 26 preguntas cada uno.",
   icons: {
