@@ -18,8 +18,6 @@ export function Rosco({
   onLetterClick,
   questions = [],
 }: RoscoProps) {
-  // Debug logging
-  console.log('Rosco questions:', questions);
   
   return (
     <div className="relative w-[28rem] h-[28rem] lg:w-[36rem] lg:h-[36rem] xl:w-[42rem] xl:h-[42rem] 2xl:w-[48rem] 2xl:h-[48rem] mx-auto">
@@ -30,10 +28,6 @@ export function Rosco({
         // Determine if letter is in top half of circle (should show tooltip below)
         const normalizedAngle = ((angle % 360) + 360) % 360;
         const isTopHalf = normalizedAngle > 315 || normalizedAngle < 225; // Top portion of circle
-        
-        if (questionData) {
-          console.log(`Found question data for letter ${letter}:`, questionData);
-        }
 
         return (
           <div

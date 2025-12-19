@@ -109,7 +109,7 @@ export default function Home() {
       (state) => state !== "default"
     );
 
-    let updatedState = { isActive: true };
+    let updatedState: Partial<GroupState> = { isActive: true };
 
     if (hasAnyProgress) {
       // If continuing, find the next available letter from the beginning
@@ -242,8 +242,10 @@ export default function Home() {
   const handleAnswer = (state: LetterState) => {
     if (!currentGroupState.isActive || isPaused) return;
 
-    // Show feedback badge
-    setFeedbackBadge({ type: state, show: true });
+    // Show feedback badge (only for non-default states)
+    if (state !== "default") {
+      setFeedbackBadge({ type: state as "correct" | "wrong" | "pass", show: true });
+    }
 
     // Hide badge after 2 seconds
     setTimeout(() => {
