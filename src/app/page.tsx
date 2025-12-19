@@ -112,23 +112,31 @@ export default function Home() {
     let updatedState: Partial<GroupState> = { isActive: true };
 
     if (hasAnyProgress) {
-      // If continuing, find the next available letter from the beginning
-      let nextLetter = "A";
+      // If continuing, check if current letter is still valid
+      const currentLetterState = currentGroup.letterStates[currentGroup.currentLetter];
+      const currentLetterIsValid = currentLetterState === "default" || currentLetterState === "pass";
+      
+      let nextLetter = currentGroup.currentLetter;
+      
+      // Only search for a new letter if the current one is no longer valid
+      if (!currentLetterIsValid) {
+        nextLetter = "A";
 
-      // Look for first default letter from A
-      for (const letter of ALPHABET) {
-        if (currentGroup.letterStates[letter] === "default") {
-          nextLetter = letter;
-          break;
-        }
-      }
-
-      // If no default letters, look for first pass letter
-      if (currentGroup.letterStates[nextLetter] !== "default") {
+        // Look for first default letter from A
         for (const letter of ALPHABET) {
-          if (currentGroup.letterStates[letter] === "pass") {
+          if (currentGroup.letterStates[letter] === "default") {
             nextLetter = letter;
             break;
+          }
+        }
+
+        // If no default letters, look for first pass letter
+        if (currentGroup.letterStates[nextLetter] !== "default") {
+          for (const letter of ALPHABET) {
+            if (currentGroup.letterStates[letter] === "pass") {
+              nextLetter = letter;
+              break;
+            }
           }
         }
       }
@@ -252,6 +260,10 @@ export default function Home() {
       setFeedbackBadge({ type: null, show: false });
     }, 2000);
 
+    // Check if we're giving pass to a letter that's already pass
+    const currentLetterWasAlreadyPass = currentGroupState.letterStates[currentGroupState.currentLetter] === "pass";
+    const givingPassToPassLetter = currentLetterWasAlreadyPass && state === "pass";
+
     const newLetterStates = {
       ...currentGroupState.letterStates,
       [currentGroupState.currentLetter]: state,
@@ -279,7 +291,9 @@ export default function Home() {
       for (let i = 1; i < ALPHABET.length; i++) {
         const nextIndex = (currentIndex + i) % ALPHABET.length;
         const letter = ALPHABET[nextIndex];
-        if (newLetterStates[letter] === "pass") {
+        // If we're giving pass to an already pass letter, skip the current letter to force advancement
+        const shouldSkipCurrentLetter = givingPassToPassLetter && letter === currentGroupState.currentLetter;
+        if (newLetterStates[letter] === "pass" && !shouldSkipCurrentLetter) {
           nextLetter = letter;
           break;
         }
