@@ -27,6 +27,7 @@ export default function Home() {
   const [selectedGroup, setSelectedGroup] = useState(1);
   const [showTimeConfig, setShowTimeConfig] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
+  const [showControls, setShowControls] = useState(false);
   const [tempTimeSettings, setTempTimeSettings] = useState<
     Record<number, number>
   >({});
@@ -606,6 +607,53 @@ export default function Home() {
     }
   }, [isPaused, currentGroupState.isActive, selectedGroup, intervalId]);
 
+  // Keyboard controls
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      // Don't trigger game actions if we're in an input field or modal
+      const activeElement = document.activeElement;
+      const isInInput = activeElement?.tagName === 'INPUT' || activeElement?.tagName === 'TEXTAREA';
+      const isInModal = showSettings || editLetterModal.isOpen || showControls;
+      
+      if (isInInput || isInModal) return;
+
+      switch (event.key) {
+        case '1':
+          event.preventDefault();
+          handleAnswer("correct");
+          break;
+        case '2':
+          event.preventDefault();
+          handleAnswer("wrong");
+          break;
+        case '3':
+          event.preventDefault();
+          handleAnswer("pass");
+          break;
+        case ' ':
+          event.preventDefault();
+          if (!currentGroupState.isActive) {
+            startGame();
+          } else {
+            togglePause();
+          }
+          break;
+        case 'Q':
+        case 'q':
+          if (event.shiftKey) {
+            event.preventDefault();
+            resetGame();
+          }
+          break;
+        default:
+          break;
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [currentGroupState.isActive, showSettings, editLetterModal.isOpen, showControls, handleAnswer, startGame, togglePause, resetGame]);
+
   useEffect(() => {
     return () => {
       if (intervalId) {
@@ -896,6 +944,16 @@ export default function Home() {
                     </div>
                   </div>
                 </div>
+
+                {/* Keyboard Controls Help Button */}
+                <div className="text-center mt-4">
+                  <button
+                    onClick={() => setShowControls(true)}
+                    className="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors text-sm font-medium flex items-center gap-2 mx-auto"
+                  >
+                    ⌨️ Controles de Teclado
+                  </button>
+                </div>
               </div>
             </div>
 
@@ -1022,6 +1080,66 @@ export default function Home() {
                 className="flex-1 px-4 py-3 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors font-medium"
               >
                 Cancelar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Keyboard Controls Modal */}
+      {showControls && (
+        <div className="fixed inset-0 bg-gray-900 bg-opacity-50 backdrop-blur-sm flex items-center justify-center z-50">
+          <div className="bg-[#0F58FC] rounded-2xl p-8 max-w-md w-full mx-4 border-4 border-white shadow-[0_12px_24px_rgba(0,0,0,0.6)]">
+            <h3 className="text-2xl font-bold text-white mb-6 text-center">
+              ⌨️ Controles de Teclado
+            </h3>
+            
+            <div className="space-y-4">
+              <div className="bg-white bg-opacity-90 rounded-lg p-4">
+                <h4 className="text-gray-800 font-bold text-lg mb-3">Durante el Juego</h4>
+                <div className="space-y-2 text-gray-700">
+                  <div className="flex justify-between items-center">
+                    <span>Respuesta Correcta</span>
+                    <span className="bg-gray-200 px-2 py-1 rounded font-mono text-sm">1</span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span>Respuesta Incorrecta</span>
+                    <span className="bg-gray-200 px-2 py-1 rounded font-mono text-sm">2</span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span>Pasapalabra</span>
+                    <span className="bg-gray-200 px-2 py-1 rounded font-mono text-sm">3</span>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="bg-white bg-opacity-90 rounded-lg p-4">
+                <h4 className="text-gray-800 font-bold text-lg mb-3">Control del Juego</h4>
+                <div className="space-y-2 text-gray-700">
+                  <div className="flex justify-between items-center">
+                    <span>Iniciar / Pausar</span>
+                    <span className="bg-gray-200 px-2 py-1 rounded font-mono text-sm">Espacio</span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span>Reiniciar Grupo</span>
+                    <span className="bg-gray-200 px-2 py-1 rounded font-mono text-sm">Shift + Q</span>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="bg-yellow-100 rounded-lg p-3 border border-yellow-300">
+                <p className="text-yellow-800 text-sm">
+                  <strong>Nota:</strong> Los controles se desactivan automáticamente cuando estás editando nombres de grupos o en los modales de configuración.
+                </p>
+              </div>
+            </div>
+            
+            <div className="flex justify-center mt-6">
+              <button
+                onClick={() => setShowControls(false)}
+                className="px-6 py-3 bg-white text-[#0F58FC] rounded-lg hover:bg-gray-100 transition-colors font-medium"
+              >
+                Entendido
               </button>
             </div>
           </div>
