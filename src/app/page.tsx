@@ -25,6 +25,46 @@ type GroupState = {
   isActive: boolean;
 };
 
+// Sound functions using Web Audio API
+const playSound = (frequency: number, duration: number, type: 'sine' | 'square' | 'triangle' = 'sine') => {
+  if (typeof window !== 'undefined' && window.AudioContext) {
+    const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
+    const oscillator = audioContext.createOscillator();
+    const gainNode = audioContext.createGain();
+    
+    oscillator.connect(gainNode);
+    gainNode.connect(audioContext.destination);
+    
+    oscillator.frequency.value = frequency;
+    oscillator.type = type;
+    
+    gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+    gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + duration);
+    
+    oscillator.start(audioContext.currentTime);
+    oscillator.stop(audioContext.currentTime + duration);
+  }
+};
+
+const playCorrectSound = () => {
+  // Pleasant ascending chord
+  playSound(523.25, 0.2); // C5
+  setTimeout(() => playSound(659.25, 0.2), 100); // E5
+  setTimeout(() => playSound(783.99, 0.3), 200); // G5
+};
+
+const playIncorrectSound = () => {
+  // Lower pitched version of original descending sound with square wave
+  playSound(174.61, 0.3, 'square'); // F3 - one octave lower than original F4
+  setTimeout(() => playSound(146.83, 0.4, 'square'), 150); // D3 - one octave lower than original D4
+};
+
+const playPassSound = () => {
+  // Neutral "pass" sound
+  playSound(440, 0.15); // A4
+  setTimeout(() => playSound(440, 0.15), 200); // A4 again
+};
+
 export default function Home() {
   const [selectedGroup, setSelectedGroup] = useState(1);
   const [showTimeConfig, setShowTimeConfig] = useState(false);
@@ -252,6 +292,19 @@ export default function Home() {
 
   const handleAnswer = (state: LetterState) => {
     if (!currentGroupState.isActive || isPaused) return;
+
+    // Play sound effects
+    switch (state) {
+      case "correct":
+        playCorrectSound();
+        break;
+      case "wrong":
+        playIncorrectSound();
+        break;
+      case "pass":
+        playPassSound();
+        break;
+    }
 
     // Show feedback badge (only for non-default states)
     if (state !== "default") {
