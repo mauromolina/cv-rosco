@@ -2,6 +2,7 @@ export type BiblicalQuestion = {
   letter: string;
   question: string;
   answer: string;
+  contains?: boolean; // true if the answer contains the letter, false/undefined if it starts with the letter
 };
 
 export type BiblicalRosco = {
@@ -96,6 +97,7 @@ export const biblicalRoscos: BiblicalRosco[] = [
         question:
           "Contiene Ñ: Montaña donde Moisés recibió las tablas de la ley",
         answer: "SINAÍ",
+        contains: true,
       },
       {
         letter: "O",
@@ -148,6 +150,7 @@ export const biblicalRoscos: BiblicalRosco[] = [
         letter: "X",
         question: "Contiene X: Rey persa que permitió el regreso del exilio",
         answer: "CIRO",
+        contains: true,
       },
       {
         letter: "Y",
@@ -242,6 +245,7 @@ export const biblicalRoscos: BiblicalRosco[] = [
         question:
           "Contiene Ñ. Montaña donde Moisés murió viendo la tierra prometida",
         answer: "NEBO",
+        contains: true,
       },
       {
         letter: "O",
@@ -287,11 +291,13 @@ export const biblicalRoscos: BiblicalRosco[] = [
         letter: "W",
         question: "Contiene W. Lugar de adoración (en inglés)",
         answer: "WORSHIP",
+        contains: true,
       },
       {
         letter: "X",
         question: "Contiene X. Imperio que conquistó Babilonia",
         answer: "PERSIA",
+        contains: true,
       },
       {
         letter: "Y",
@@ -370,6 +376,7 @@ export const biblicalRoscos: BiblicalRosco[] = [
         letter: "K",
         question: "Contiene K. Lugar santo donde estaba el Arca del Pacto",
         answer: "SANTUARIO",
+        contains: true,
       },
       {
         letter: "L",
@@ -440,11 +447,13 @@ export const biblicalRoscos: BiblicalRosco[] = [
         question:
           "Contiene W. Milagro de Jesús caminando sobre las aguas (en inglés: walking)",
         answer: "WALKING",
+        contains: true,
       },
       {
         letter: "X",
         question: "Contiene X. Liberación del pueblo de Israel del exilio",
         answer: "ÉXODO",
+        contains: true,
       },
       {
         letter: "Y",
@@ -519,6 +528,7 @@ export const biblicalRoscos: BiblicalRosco[] = [
         question:
           "Contiene K. Instrumento musical de percusión mencionado en los Salmos",
         answer: "PANDERO",
+        contains: true,
       },
       {
         letter: "L",
@@ -540,6 +550,7 @@ export const biblicalRoscos: BiblicalRosco[] = [
         letter: "Ñ",
         question: "Contiene Ñ. Señal en el cielo del pacto de Dios con Noé",
         answer: "ARCOÍRIS",
+        contains: true,
       },
       {
         letter: "O",
@@ -589,12 +600,14 @@ export const biblicalRoscos: BiblicalRosco[] = [
         question:
           "Contiene W. Agua que Jesús convirtió en vino (en inglés: water)",
         answer: "WATER",
+        contains: true,
       },
       {
         letter: "X",
         question:
           "Contiene X. Instrumento musical de percusión (xilófono bíblico)",
         answer: "CÍMBALOS",
+        contains: true,
       },
       {
         letter: "Y",
@@ -605,6 +618,300 @@ export const biblicalRoscos: BiblicalRosco[] = [
         letter: "Z",
         question: "Con Z. Calzado que Juan el Bautista no era digno de desatar",
         answer: "ZAPATOS",
+      },
+    ],
+  },
+  {
+    groupId: 5,
+    groupName: "Grupo 5",
+    theme: "Nuevo Testamento y Apóstoles",
+    timeLimit: 300,
+    questions: [
+      {
+        letter: "A",
+        question: "Con A. Apóstol que negó a Jesús tres veces antes de la crucifixión",
+        answer: "ANDRÉS",
+      },
+      {
+        letter: "B",
+        question: "Con B. Lugar donde Jesús nació según los evangelios",
+        answer: "BELÉN",
+      },
+      {
+        letter: "C",
+        question: "Con C. Apóstol que dudó de la resurrección hasta ver las heridas",
+        answer: "TOMÁS",
+      },
+      {
+        letter: "D",
+        question: "Con D. Uno de los doce apóstoles, también llamado Judas (no Iscariote)",
+        answer: "TADEO",
+      },
+      {
+        letter: "E",
+        question: "Con E. Evangelista que escribió el libro del Apocalipsis",
+        answer: "JUAN",
+      },
+      {
+        letter: "F",
+        question: "Con F. Hijo de Zebedeo, hermano de Juan, uno de los doce",
+        answer: "FELIPE",
+      },
+      {
+        letter: "G",
+        question: "Con G. Región donde Jesús realizó gran parte de su ministerio",
+        answer: "GALILEA",
+      },
+      {
+        letter: "H",
+        question: "Con H. Rey que mandó matar a los niños menores de dos años",
+        answer: "HERODES",
+      },
+      {
+        letter: "I",
+        question: "Con I. Apóstol que traicionó a Jesús por treinta monedas",
+        answer: "JUDAS",
+      },
+      {
+        letter: "J",
+        question: "Con J. Discípulo amado, escribió el cuarto evangelio",
+        answer: "JUAN",
+      },
+      {
+        letter: "K",
+        question: "Contiene K. Lugar donde Jesús fue bautizado por Juan",
+        answer: "JORDÁN",
+        contains: true,
+      },
+      {
+        letter: "L",
+        question: "Con L. Amigo de Jesús que resucitó después de cuatro días muerto",
+        answer: "LÁZARO",
+      },
+      {
+        letter: "M",
+        question: "Con M. Madre de Jesús, virgen cuando concibió por el Espíritu Santo",
+        answer: "MARÍA",
+      },
+      {
+        letter: "N",
+        question: "Con N. Ciudad donde Jesús creció en su juventud",
+        answer: "NAZARET",
+      },
+      {
+        letter: "Ñ",
+        question: "Contiene Ñ. Tipo de enseñanza que usaba Jesús con historias",
+        answer: "PARÁBOLA",
+        contains: true,
+      },
+      {
+        letter: "O",
+        question: "Con O. Monte donde Jesús enseñó las bienaventuranzas",
+        answer: "OLIVOS",
+      },
+      {
+        letter: "P",
+        question: "Con P. Primer nombre del apóstol Pedro antes de seguir a Jesús",
+        answer: "SIMÓN",
+      },
+      {
+        letter: "Q",
+        question: "Con Q. Lo que Jesús hizo cuando resucitó: permanecer o quedarse",
+        answer: "QUEDAR",
+      },
+      {
+        letter: "R",
+        question: "Con R. Evento cuando Jesús volvió a la vida al tercer día",
+        answer: "RESURRECCIÓN",
+      },
+      {
+        letter: "S",
+        question: "Con S. Apóstol que fue pescador y recibió las llaves del reino",
+        answer: "SIMÓN",
+      },
+      {
+        letter: "T",
+        question: "Con T. Apóstol conocido como 'el mellizo' que dudó de la resurrección",
+        answer: "TOMÁS",
+      },
+      {
+        letter: "U",
+        question: "Con U. Acción de ungir con aceite que realizaron con Jesús",
+        answer: "UNCIÓN",
+      },
+      {
+        letter: "V",
+        question: "Con V. Lugar donde Jesús convirtió el agua en vino",
+        answer: "CANÁ",
+      },
+      {
+        letter: "W",
+        question: "Contiene W. Lugar donde adoraban en el templo (en inglés)",
+        answer: "WORSHIP",
+        contains: true,
+      },
+      {
+        letter: "X",
+        question: "Contiene X. Sufrimiento que Jesús experimentó en la cruz",
+        answer: "CRUCIFIXIÓN",
+        contains: true,
+      },
+      {
+        letter: "Y",
+        question: "Con Y. Nombre de Dios en el Nuevo Testamento (Yahvé)",
+        answer: "YAHVÉ",
+      },
+      {
+        letter: "Z",
+        question: "Con Z. Hijo de Zebedeo, uno de los doce apóstoles",
+        answer: "ZEBEDEO",
+      },
+    ],
+  },
+  {
+    groupId: 6,
+    groupName: "Grupo 6",
+    theme: "Profetas y Libros Bíblicos",
+    timeLimit: 300,
+    questions: [
+      {
+        letter: "A",
+        question: "Con A. Profeta que predijo la venida del Mesías, autor de un libro profético",
+        answer: "ISAÍAS",
+      },
+      {
+        letter: "B",
+        question: "Con B. Profeta que fue tragado por un gran pez por tres días",
+        answer: "JONÁS",
+      },
+      {
+        letter: "C",
+        question: "Con C. Libro que registra las genealogías y eventos históricos de Israel",
+        answer: "CRÓNICAS",
+      },
+      {
+        letter: "D",
+        question: "Con D. Libro donde se registran las leyes dadas por Moisés",
+        answer: "DEUTERONOMIO",
+      },
+      {
+        letter: "E",
+        question: "Con E. Profeta que fue llevado al cielo en un carro de fuego",
+        answer: "ELÍAS",
+      },
+      {
+        letter: "F",
+        question: "Con F. Libro que cuenta la historia de una mujer moabita fiel",
+        answer: "RUT",
+      },
+      {
+        letter: "G",
+        question: "Con G. Primer libro de la Biblia que narra la creación",
+        answer: "GÉNESIS",
+      },
+      {
+        letter: "H",
+        question: "Con H. Profeta menor que profetizó sobre el amor de Dios hacia Israel infiel",
+        answer: "OSEAS",
+      },
+      {
+        letter: "I",
+        question: "Con I. Profeta que tuvo visiones del templo celestial y la gloria de Dios",
+        answer: "ISAÍAS",
+      },
+      {
+        letter: "J",
+        question: "Con J. Profeta joven que fue llamado antes de nacer",
+        answer: "JEREMÍAS",
+      },
+      {
+        letter: "K",
+        question: "Contiene K. Libro de sabiduría escrito principalmente por Salomón",
+        answer: "PROVERBIOS",
+        contains: true,
+      },
+      {
+        letter: "L",
+        question: "Con L. Libro poético que expresa dolor y lamento por Jerusalén",
+        answer: "LAMENTACIONES",
+      },
+      {
+        letter: "M",
+        question: "Con M. Último profeta del Antiguo Testamento",
+        answer: "MALAQUÍAS",
+      },
+      {
+        letter: "N",
+        question: "Con N. Profeta que predijo la destrucción de Nínive",
+        answer: "NAHÚM",
+      },
+      {
+        letter: "Ñ",
+        question: "Contiene Ñ. Época cuando Israel no tenía rey y cada uno hacía lo que bien le parecía",
+        answer: "JUECES",
+        contains: true,
+      },
+      {
+        letter: "O",
+        question: "Con O. Profeta menor que profetizó sobre el amor de Dios",
+        answer: "OSEAS",
+      },
+      {
+        letter: "P",
+        question: "Con P. Libro de himnos y cánticos escritos principalmente por David",
+        answer: "SALMOS",
+      },
+      {
+        letter: "Q",
+        question: "Con Q. Libro que muestra la vanidad de la vida sin Dios",
+        answer: "ECLESIASTÉS",
+      },
+      {
+        letter: "R",
+        question: "Con R. Libro que narra el regreso del exilio babilónico",
+        answer: "ESDRAS",
+      },
+      {
+        letter: "S",
+        question: "Con S. Profeta que ungió a David como rey de Israel",
+        answer: "SAMUEL",
+      },
+      {
+        letter: "T",
+        question: "Con T. Libro donde Job cuestiona el sufrimiento del justo",
+        answer: "JOB",
+      },
+      {
+        letter: "U",
+        question: "Con U. Profeta que interpretó sueños en la corte de Babilonia",
+        answer: "DANIEL",
+      },
+      {
+        letter: "V",
+        question: "Con V. Libro que narra las victorias del pueblo de Dios sobre sus enemigos",
+        answer: "JOSUÉ",
+      },
+      {
+        letter: "W",
+        question: "Contiene W. Libro de sabiduría que incluye proverbios (en inglés: wisdom)",
+        answer: "WISDOM",
+        contains: true,
+      },
+      {
+        letter: "X",
+        question: "Contiene X. Libro que narra la salida de Egipto",
+        answer: "ÉXODO",
+        contains: true,
+      },
+      {
+        letter: "Y",
+        question: "Con Y. Nombre hebreo de Dios revelado a Moisés",
+        answer: "YAHVÉ",
+      },
+      {
+        letter: "Z",
+        question: "Con Z. Profeta que tuvo visiones durante el exilio babilónico",
+        answer: "ZACARÍAS",
       },
     ],
   },

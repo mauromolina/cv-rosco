@@ -13,6 +13,8 @@ const GROUPS = [
   { id: 2, name: "Grupo 2" },
   { id: 3, name: "Grupo 3" },
   { id: 4, name: "Grupo 4" },
+  { id: 5, name: "Grupo 5" },
+  { id: 6, name: "Grupo 6" },
 ];
 
 type GroupState = {
@@ -34,7 +36,7 @@ export default function Home() {
   const [customTimeLimits, setCustomTimeLimits] = useState<
     Record<number, number>
   >({});
-  const [activeGroupsCount, setActiveGroupsCount] = useState<number>(4);
+  const [activeGroupsCount, setActiveGroupsCount] = useState<number>(6);
   const [customGroupNames, setCustomGroupNames] = useState<Record<number, string>>({});
   const [isLoaded, setIsLoaded] = useState(false);
   const [tempGroupNames, setTempGroupNames] = useState<Record<number, string>>({});
@@ -330,7 +332,7 @@ export default function Home() {
       // Auto-advance to next group if available (but don't start their timer)
       if (!isRoscoCompleted) {
         const nextGroup = selectedGroup < activeGroupsCount ? selectedGroup + 1 : 1;
-        if (!groupStates[nextGroup].isCompleted) {
+        if (groupStates[nextGroup] && !groupStates[nextGroup].isCompleted) {
           setTimeout(() => {
             setSelectedGroup(nextGroup);
           }, 1500);
@@ -345,6 +347,7 @@ export default function Home() {
 
   const getGroupStatus = (groupId: number) => {
     const group = groupStates[groupId];
+    if (!group) return "pending"; // Group doesn't exist yet
     if (group.isCompleted) return "completed";
     if (group.isActive) return "active";
     const hasProgress = Object.values(group.letterStates).some(
@@ -431,6 +434,26 @@ export default function Home() {
     return customGroupNames[groupId] || GROUPS.find(g => g.id === groupId)?.name || `Grupo ${groupId}`;
   };
 
+  const getGroupStats = (groupId: number) => {
+    const group = groupStates[groupId];
+    if (!group) {
+      return {
+        correct: 0,
+        wrong: 0,
+        pass: 0,
+        time: 300, // Default time
+      };
+    }
+    
+    const letterStates = Object.values(group.letterStates);
+    return {
+      correct: letterStates.filter((s) => s === "correct").length,
+      wrong: letterStates.filter((s) => s === "wrong").length,
+      pass: letterStates.filter((s) => s === "pass").length,
+      time: group.time,
+    };
+  };
+
   const toggleFullscreen = async () => {
     try {
       if (!document.fullscreenElement) {
@@ -512,6 +535,36 @@ export default function Home() {
     }
   }, [customGroupNames, isLoaded]);
 
+  // Initialize missing group states when activeGroupsCount changes
+  useEffect(() => {
+    if (isLoaded) {
+      setGroupStates((prev) => {
+        const updated = { ...prev };
+        let hasChanges = false;
+        
+        // Initialize missing groups
+        for (let i = 1; i <= activeGroupsCount; i++) {
+          if (!updated[i]) {
+            const rosco = biblicalRoscos.find((r) => r.groupId === i);
+            const timeLimit = customTimeLimits[i] || rosco?.timeLimit || 300;
+            updated[i] = {
+              letterStates: Object.fromEntries(
+                ALPHABET.map((letter) => [letter, "default"])
+              ),
+              currentLetter: "A",
+              time: timeLimit,
+              isCompleted: false,
+              isActive: false,
+            };
+            hasChanges = true;
+          }
+        }
+        
+        return hasChanges ? updated : prev;
+      });
+    }
+  }, [activeGroupsCount, customTimeLimits, isLoaded]);
+
   // Load localStorage values after hydration
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -519,7 +572,7 @@ export default function Home() {
       const parsedTimeLimits = savedTimeLimits ? JSON.parse(savedTimeLimits) : {};
       
       const savedActiveGroups = localStorage.getItem("rosco-active-groups");
-      const parsedActiveGroups = savedActiveGroups ? parseInt(savedActiveGroups) : 4;
+      const parsedActiveGroups = savedActiveGroups ? parseInt(savedActiveGroups) : 6;
       
       const savedGroupNames = localStorage.getItem("rosco-group-names");
       const parsedGroupNames = savedGroupNames ? JSON.parse(savedGroupNames) : {};
@@ -763,11 +816,7 @@ export default function Home() {
                             ✓
                           </span>
                           <span className="text-green-100 font-medium text-sm">
-                            {
-                              Object.values(
-                                groupStates[group.id].letterStates
-                              ).filter((s) => s === "correct").length
-                            }
+                            {getGroupStats(group.id).correct}
                           </span>
                         </div>
                         <div className="flex items-center gap-1 px-2 py-1 rounded-md bg-red-500 bg-opacity-20 border border-red-400">
@@ -775,11 +824,7 @@ export default function Home() {
                             ✕
                           </span>
                           <span className="text-red-100 font-medium text-sm">
-                            {
-                              Object.values(
-                                groupStates[group.id].letterStates
-                              ).filter((s) => s === "wrong").length
-                            }
+                            {getGroupStats(group.id).wrong}
                           </span>
                         </div>
                         <div className="flex items-center gap-1 px-2 py-1 rounded-md bg-orange-500 bg-opacity-20 border border-orange-400">
@@ -787,26 +832,22 @@ export default function Home() {
                             —
                           </span>
                           <span className="text-orange-100 font-medium text-sm">
-                            {
-                              Object.values(
-                                groupStates[group.id].letterStates
-                              ).filter((s) => s === "pass").length
-                            }
+                            {getGroupStats(group.id).pass}
                           </span>
                         </div>
                       </div>
                       <div
                         className={cn(
                           "px-3 py-1 rounded-lg font-bold text-base flex items-center gap-2",
-                          groupStates[group.id].time <= 60
+                          getGroupStats(group.id).time <= 60
                             ? "bg-red-600 text-white"
-                            : groupStates[group.id].time <= 120
+                            : getGroupStats(group.id).time < 110
                             ? "bg-yellow-600 text-white"
                             : "bg-blue-600 text-white"
                         )}
                       >
                         <span className="text-sm">⏰</span>
-                        {formatTime(groupStates[group.id].time)}
+                        {formatTime(getGroupStats(group.id).time)}
                       </div>
                     </div>
                   </button>
@@ -998,9 +1039,24 @@ export default function Home() {
           {currentGroupState.isActive && (
             <div className="fixed bottom-16 left-1/2 transform -translate-x-1/2 w-full max-w-5xl px-8 z-10">
               <div className="bg-[#0F58FC] rounded-2xl p-6 border-4 border-white shadow-[0_12px_24px_rgba(0,0,0,0.6),0_6px_12px_rgba(0,0,0,0.4),inset_0_2px_0_rgba(255,255,255,0.3)]">
-                <h2 className="text-lg xl:text-xl font-semibold text-white mb-2">
-                  Letra {currentGroupState.currentLetter}
-                </h2>
+                {currentQuestion && (
+                  <div className="mb-4 flex justify-start">
+                    <span className={cn(
+                      "inline-block px-6 py-3 rounded-xl text-lg xl:text-xl font-extrabold border-4 shadow-[0_4px_12px_rgba(0,0,0,0.4)] transform transition-all",
+                      currentQuestion.contains
+                        ? "bg-gradient-to-r from-orange-500 to-orange-600 text-white border-orange-200 shadow-orange-500/30"
+                        : "bg-gradient-to-r from-green-500 to-green-600 text-white border-green-200 shadow-green-500/30"
+                    )}
+                    style={{
+                      textShadow: "0 2px 4px rgba(0, 0, 0, 0.8)",
+                      letterSpacing: "1px"
+                    }}>
+                      {currentQuestion.contains 
+                        ? `CONTIENE ${currentGroupState.currentLetter}` 
+                        : `COMIENZA CON ${currentGroupState.currentLetter}`}
+                    </span>
+                  </div>
+                )}
                 <p
                   className="text-xl xl:text-2xl 2xl:text-3xl font-bold text-white leading-tight"
                   style={{
@@ -1175,6 +1231,8 @@ export default function Home() {
                     <option value={2}>2 Grupos</option>
                     <option value={3}>3 Grupos</option>
                     <option value={4}>4 Grupos</option>
+                    <option value={5}>5 Grupos</option>
+                    <option value={6}>6 Grupos</option>
                   </select>
                 </div>
               </div>
