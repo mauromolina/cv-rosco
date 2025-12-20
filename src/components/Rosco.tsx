@@ -10,7 +10,7 @@ interface RoscoProps {
   questions?: Array<{ letter: string; question: string; answer: string }>;
 }
 
-const ALPHABET = "ABCDEFGHIJKLMNÑOPQRSTUVWXYZ".split("");
+const ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
 
 export function Rosco({
   letterStates,

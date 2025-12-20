@@ -7,7 +7,7 @@ import { cn } from "@/utils/cn";
 import type { LetterState } from "@/types";
 import { biblicalRoscos } from "@/data/biblical-roscos";
 
-const ALPHABET = "ABCDEFGHIJKLMNÑOPQRSTUVWXYZ".split("");
+const ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
 const GROUPS = [
   { id: 1, name: "Grupo 1" },
   { id: 2, name: "Grupo 2" },
